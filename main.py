@@ -1,8 +1,5 @@
-from asyncio.windows_events import NULL
-from distutils.dep_util import newer_group
 import requests
 import os
-import json
 from dotenv import load_dotenv
 load_dotenv()
 

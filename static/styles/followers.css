@@ -1,0 +1,9 @@
+.followers{
+    height: auto;
+    width:100%;
+    background: whitesmoke;
+}
+
+.follower{
+    border: 1px solid black;
+}

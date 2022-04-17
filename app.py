@@ -22,5 +22,9 @@ def internal_error(error):
 def not_found_error(error):
     return render_template('404.html'), 404
 
+@app.errorhandler(429)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
 if __name__ == '__main__':
     app.run()
