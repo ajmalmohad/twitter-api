@@ -1,3 +1,5 @@
+from asyncio.windows_events import NULL
+from distutils.dep_util import newer_group
 import requests
 import os
 import json
@@ -63,7 +65,9 @@ def main():
     follow_url = followers_url(id)
     params = followers_params()
     followers = connect_follow_endpoint(follow_url, params)
-    print(json.dumps(followers, indent=4, sort_keys=True))
+    all_followers = followers['data']
+    metadata = followers['meta']
+    print(all_followers)
 
 
 if __name__ == "__main__":
