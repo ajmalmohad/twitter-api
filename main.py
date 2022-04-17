@@ -58,7 +58,7 @@ def connect_follow_endpoint(url, params):
     return response.json()
 
 
-def main():
+def all_followers():
     users_url = user_url()
     user = connect_user_endpoint(users_url)
     id = user['data'][0]['id']
@@ -68,12 +68,19 @@ def main():
     all_followers = followers['data']
     token = followers['meta']['next_token']
     while(token):
-        params['pagination_token'] = token
-        new_followers = connect_follow_endpoint(follow_url, params)
+        new_params = followers_params()
+        new_params['pagination_token'] = token
+        new_followers = connect_follow_endpoint(follow_url, new_params)
         all_followers += new_followers['data']
-        token = new_followers['meta']['next_token']
-    print(all_followers)
+        if('next_token' not in new_followers['meta']):
+            token = None
+        else:
+            token = new_followers['meta']['next_token']
+    return all_followers
 
+
+def main():
+    followers = all_followers()
 
 if __name__ == "__main__":
     main()
