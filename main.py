@@ -66,7 +66,12 @@ def main():
     params = followers_params()
     followers = connect_follow_endpoint(follow_url, params)
     all_followers = followers['data']
-    metadata = followers['meta']
+    token = followers['meta']['next_token']
+    while(token):
+        params['pagination_token'] = token
+        new_followers = connect_follow_endpoint(follow_url, params)
+        all_followers += new_followers['data']
+        token = new_followers['meta']['next_token']
     print(all_followers)
 
 
