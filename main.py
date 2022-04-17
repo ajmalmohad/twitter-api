@@ -8,9 +8,7 @@ load_dotenv()
 
 bearer_token = os.getenv('BEARER')
 
-
-def user_url():
-    user = input("Enter Username :")
+def user_url(user):
     usernames = "usernames={}".format(user)
     user_fields = "user.fields=description,created_at"
     url = "https://api.twitter.com/2/users/by?{}".format(usernames, user_fields)
@@ -32,7 +30,7 @@ def followers_oauth(r):
     return r
 
 def followers_params():
-    return {"user.fields": "created_at"}
+    return {"user.fields": "public_metrics,profile_image_url",}
 
 def connect_user_endpoint(url):
     response = requests.request("GET", url, auth=user_oauth,)
@@ -58,8 +56,8 @@ def connect_follow_endpoint(url, params):
     return response.json()
 
 
-def all_followers():
-    users_url = user_url()
+def all_followers(username):
+    users_url = user_url(username)
     user = connect_user_endpoint(users_url)
     id = user['data'][0]['id']
     follow_url = followers_url(id)
@@ -78,9 +76,11 @@ def all_followers():
             token = new_followers['meta']['next_token']
     return all_followers
 
+def sort_followers(followers):
+    followers.sort(key=lambda x: x['public_metrics']['followers_count'], reverse=True)
 
-def main():
-    followers = all_followers()
-
-if __name__ == "__main__":
-    main()
+def get_top_100(username):
+    followers = all_followers(username)
+    sort_followers(followers)
+    return followers[:100]
+    
